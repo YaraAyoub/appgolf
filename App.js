@@ -1,12 +1,10 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, TouchableOpacity, AppRegistry, Image } from 'react-native';
-import React, {useState} from 'react';
-
-import { GameEngine } from "react-native-game-engine";
+import * as React from 'react';
 
 import Constants from 'expo-constants';
 
-//Image source={require('./img/fondtest.png')} style={{flex:0.5, resizeMode:'stretch',}}/>
+import { StyleSheet, Text, View, ImageBackground, Button, TouchableOpacity, AppRegistry, Image } from 'react-native';
+import {useState} from 'react';
+
 
 import { VictoryScreen } from "./src/VictoryScreen";
 import { GameOverScreen } from "./src/GameOverScreen";
@@ -16,6 +14,8 @@ import { Jeu } from './src/Jeu';
 
 export default function App() { 
   const [nbCoup, setNbCoup] = useState(0);  // Nombre de coup joué par le joueur (initialisé à 0)
+  const [xFlag, setXFlag] = useState(0);
+  const [yFlag, setYFlag] = useState(0);
   
   const [etapeJeu, setEtapeJeu] = useState(3);  // 0 = jeu en cours, 1 = victoire, 2 = game over, 3 = menu, 4 = crédit
 
@@ -43,16 +43,24 @@ export default function App() {
 
   const startGame = () => { // Lancement du jeu
     setEtapeJeu(0); // jeu en cours
+    setXFlag(Math.floor(Math.random() * 300) + 1); // Positionnement aléatoire du drapeau
+    setYFlag(Math.floor(Math.random() * 300) + 1); // Positionnement aléatoire du drapeau
   }
 
   const credit = () => {  // Affichage des crédits
     setEtapeJeu(4); // crédit
   }
 
+  const checkBallFlagPosition = (xBall, yBall) => {
+    if((xFlag < xBall+50 || xFlag > xBall-50) && (yFlag < yBall+50 || yFlag > yBall-50)){
+      victoire();
+    }
+  }
+
   const renderScene = () => { // Fonction qui permet de gérer les différentes étapes du jeu
     switch(etapeJeu){
       case 0: // jeu en cours
-        return <Jeu nbCoup={nbCoup} incrementValue={incrementValue} victoire={victoire} gameOver={gameOver} />;
+        return <Jeu nbCoup={nbCoup} incrementValue={incrementValue} victoire={victoire} gameOver={gameOver} xFlag={xFlag} yFlag={yFlag}/>;
       case 1: // victoire
         return <VictoryScreen score={nbCoup} bestScore={nbCoup} resetGame={menu} /> // On passe le score et le meilleur score à la fonction VictoryScreen
       case 2: // game over
@@ -70,58 +78,6 @@ export default function App() {
     </View>
   );
 }
-
-/*
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    //margin: 12,
-    //backgroundColor: 'green',
-  },
-  touchable: {
-    alignItems: 'center',
-    backgroundColor: '#7986cb',
-    padding: 10,
-    marginTop: 30,
-    borderRadius: 10,
-  },
-  touchableText: {
-    color: 'white',
-    fontSize: 20,
-  },
-  text: {
-    color: 'black',
-    fontSize: 40,
-  },
-});
-
-*/
-
-/*
-import * as React from 'react';
-import { ImageBackground, StyleSheet, Text, View } from "react-native";
-import Constants from 'expo-constants';
-
-// You can import from local files
-import Ball from './components/AssetExample';
-
-// or any pure javascript modules available in npm
-import { Card } from 'react-native-paper';
-const image = { uri: "https://reactjs.org/logo-og.png" };
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.paragraph} />
-        <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-          <Ball />
-        </ImageBackground>
-        
-    </View>
-  );
-}
-*/
 
 const styles = StyleSheet.create({
   container: {
@@ -142,4 +98,3 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
