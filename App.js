@@ -1,4 +1,46 @@
 import * as React from 'react';
+import { ImageBackground, StyleSheet, Text, View } from "react-native";
+import Constants from 'expo-constants';
+
+// You can import from local files
+import Ball from './components/AssetExample';
+//import Fleche from './components/Fleche';
+//import coordTouch from '../src test/coordTouch';
+
+
+// or any pure javascript modules available in npm
+import { Card } from 'react-native-paper';
+const image = { uri: "https://reactjs.org/logo-og.png" };
+export default function App() {
+  const props = {firstName: 'Ben', job: 'Designer' };
+  return (
+    <View style={styles.container}>
+        <Ball {...props}/>        
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: '#ecf0f1',
+  },
+  image: {
+    flex: 1,
+    justifyContent: "center"
+  },
+  paragraph: {
+    margin: 24,
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+});
+
+
+/*
+import * as React from 'react';
 
 import Constants from 'expo-constants';
 
@@ -98,3 +140,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+*/

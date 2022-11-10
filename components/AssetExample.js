@@ -1,13 +1,16 @@
 //create a program using react that make a ball move around the screen, when the ball hits the edge of the screen it should bounce back
 
+
 //import react
-import React, { useRef } from "react";
+import React, {useState} from "react";
 import { Button } from 'react-native-paper';
-import { ImageBackground, StyleSheet, Text, View, Dimensions, Animated, Switch } from "react-native";
+import { ImageBackground, StyleSheet, Text, View, Dimensions, TouchableOpacity } from "react-native";
+
 
 //Constante Ã©cran
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+//const obj = new Fleche();
 
 class Ball extends React.Component {
   //create a constructor
@@ -22,7 +25,7 @@ class Ball extends React.Component {
       isToggleOn: true,
       prectoggle: true,
       x: 200,
-      y: 200,
+      y: 300,
       vx: 0,
       vy: 0,
       radius: 10,
@@ -30,7 +33,14 @@ class Ball extends React.Component {
       touchable: 1,
       height: 60,
       rotate: 0,
-      speed:0,
+      speed: 0,
+      test: props.firstname,
+      show_arrow: 1,
+      show_menu: 0,
+      x_drapeau: 150,
+      y_drapeau: 400,// MIN : windowHeight * 0.167 // MAX :  windowHeight * 0.78 
+      x_touch: 0,
+      y_touch: 0,
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -38,12 +48,11 @@ class Ball extends React.Component {
     this.handleClickDOWN = this.handleClickDOWN.bind(this);
     this.handleClickLEFT = this.handleClickLEFT.bind(this);
     this.handleClickRIGHT = this.handleClickRIGHT.bind(this);
+    this.start = this.start.bind(this);
+    this.handlePress = this.handlePress.bind(this);
+
   }
   //create a method called componentDidMount
-
-  getX() {
-    return this.state.x;
-  }
 
   handleClick() {
     if (this.state.touchable == 1) {
@@ -57,13 +66,41 @@ class Ball extends React.Component {
 
   }
 
-  handleClickUP() {
+  start() {
+// le y doit etre a plus de 16.7 % de la taille de l ecran 
+    let max_height = windowHeight * 0.777;
+    let min_height = windowHeight * 0.167;
+    let max_width = windowWidth * 0.841;
+    let y_drapeau_bis = Math.random()*(max_height - min_height ) + min_height;
+    let x_drapeau_bis = Math.random()*(max_width);
 
-    let speed2 = this.state.speed + 2;
     this.setState(prevState => ({
-      speed: speed2,
+      show_menu: 0,
+      y_drapeau : y_drapeau_bis, 
+      x_drapeau : x_drapeau_bis
     })
     );
+
+  }
+
+  getX() {
+    return this.state.x;
+  }
+
+  handleClickUP() {
+    let max_height = windowHeight * 0.777;
+    let min_height = windowHeight * 0.167;
+    let max_width = windowWidth * 0.841;
+    let y_drapeau_bis = Math.random()*(max_height - min_height ) + min_height;
+    let x_drapeau_bis = Math.random()*(max_width);
+
+    let speed2 = this.state.speed + 2;
+    this.setState({
+      speed: speed2,
+      y_drapeau : y_drapeau_bis, 
+      x_drapeau : x_drapeau_bis
+    })
+    ;
 
   }
 
@@ -76,7 +113,7 @@ class Ball extends React.Component {
 
   }
   handleClickDOWN() {
-   let speed2 = this.state.speed - 2;
+    let speed2 = this.state.speed - 2;
     this.setState(prevState => ({
       speed: speed2,
     })
@@ -92,10 +129,18 @@ class Ball extends React.Component {
     );
 
   }
- 
+
+  handlePress(e) {
+    this.setState( {
+      x_touch: e.nativeEvent.locationX,
+      y_touch: e.nativeEvent.locationY,
+    })
+    ;
+  }
+
   //create a method called moveBall
   moveBall() {
-   
+
     //do some stuff
     setTimeout(this.moveBall.bind(this), 1);
 
@@ -117,6 +162,8 @@ class Ball extends React.Component {
     let rotate = this.state.rotate;
 
     let touchable = 0;
+
+    let show_arrow = this.state.show_arrow;
     //create a variable called radius and set it to the current radius of the ball
     let radius = this.state.radius;
     //create a variable called color and set it to the current color of the ball
@@ -134,8 +181,8 @@ class Ball extends React.Component {
     }
     if (toggle != prectoggle) {
       prectoggle = toggle;
-      vx = this.state.speed*0.05;
-      vy =  this.state.speed*0.05;
+      vx = this.state.speed * 0.05;
+      vy = this.state.speed * 0.05;
     }
 
     let nextX = x + vx * Math.cos((rotate * 3.14) / 180);
@@ -163,6 +210,10 @@ class Ball extends React.Component {
       vx = 0;
       vy = 0;
       touchable = 1;
+      show_arrow = 1;
+    }
+    else {
+      show_arrow = 0;
     }
 
     if (vx < 0) {
@@ -192,13 +243,23 @@ class Ball extends React.Component {
       prectoggle: prectoggle,
       touchable: touchable,
       rotate: rotate,
+      show_arrow: show_arrow
+
     });
 
   }
-  
+  //else{
+  //let test = this.state.test+1;
+  //this.setState({
+  // test : test,
+
+  //    });
+  //}
+  //call the method moveBall after 10 milliseconds
+  //}
   //create a method called render
   render() {
-    
+
     let styles = StyleSheet.create({
       //create a variable called style and set it to an object with the properties of position, top, left, width, height, borderRadius, and backgroundColor
       styleball: {
@@ -212,7 +273,7 @@ class Ball extends React.Component {
       },
       styleup: {
         position: 'absolute',
-        top: 500,
+        top: 470,
         left: 85,
         flex: 1,
         justifyContent: "center",
@@ -246,14 +307,6 @@ class Ball extends React.Component {
         height: 60,
         width: 60,
       },
-      styleArrow: {
-
-        flex: 1,
-        justifyContent: "center",
-        height: 60,
-        width: 6,
-
-      },
       rectangle: {
         width: this.state.height,
         height: 5,
@@ -269,10 +322,10 @@ class Ball extends React.Component {
 
         ],
       },
-      force : {
-        position:"absolute",
-        top : this.state.y-20,
-        left : this.state.x
+      force: {
+        position: "absolute",
+        top: this.state.y - 20,
+        left: this.state.x
       },
       triangle: {
 
@@ -294,36 +347,111 @@ class Ball extends React.Component {
           }
         ],
       },
+      touchable: {
+        alignItems: 'center',
+        backgroundColor: '#7986cb',
+        padding: 10,
+        marginTop: 30,
+        borderRadius: 10,
+      },
+      touchableText: {
+        color: 'white',
+        fontSize: 20,
+      },
+      text: {
+        color: 'black',
+        fontSize: 40,
+      },
+      touchableScreen: {
+        backgroundColor: 'lightgreen',
+        width: windowWidth,
+        height: windowHeight
+      },
+      image: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: 'center',
+      },
+      drapeau: {
+        width: 70,
+        height: 80,
+        position: 'absolute',
+        top: this.state.y_drapeau - 60,
+        left: this.state.x_drapeau + 8
+      },
+      trou:
+      {
+        width: 40,
+        height: 40,
+        borderRadius: 60 / 2,
+        backgroundColor: 'black',
+        position: 'absolute',
+        top: this.state.y_drapeau,
+        left: this.state.x_drapeau
+      }
+
     });
 
     //return the ball
     return (
-      <>
-        <View style={styles.rectangle}>
-          <View style={styles.triangle} />
-        </View>
-        <Text style={styles.force}> Force : {this.state.speed}</Text>
+      <TouchableOpacity onPress={(e)=> this.handlePress(e)} style={styles.touchableScreen}>
 
-        <ImageBackground source={require('../img/balle.png')} resizeMode="cover" style={styles.styleball}>
-          <Button onPress={this.handleClick}></Button>
+<Text style={styles.text}>Coordinates: {this.state.x_touch}, {this.state.y_touch}</Text>
 
-        </ImageBackground>
-        <ImageBackground source={require('../img/flecheup.png')} resizeMode="cover" style={styles.styleup}>
-          <Button onPress={this.handleClickUP}></Button>
-        </ImageBackground>
-        <ImageBackground source={require('../img/flechert.png')} resizeMode="cover" style={styles.stylert}>
-          <Button onPress={this.handleClickRIGHT}></Button>
-        </ImageBackground>
-        <ImageBackground source={require('../img/flechelt.png')} resizeMode="cover" style={styles.stylelt}>
-          <Button onPress={this.handleClickLEFT}></Button>
-        </ImageBackground>
-        <ImageBackground source={require('../img/flechedo.png')} resizeMode="cover" style={styles.styledo}>
-          <Button onPress={this.handleClickDOWN}></Button>
-        </ImageBackground>
+        {this.state.show_menu ? (
 
-      </>
+          <ImageBackground source={require('../img/bgMenu.png')} resizeMode="cover" style={styles.image}>
+            <Text style={styles.text}>Menu</Text>
+
+            <TouchableOpacity style={styles.touchable} onPress={this.start}>
+              <Text style={styles.touchableText}>Start</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.touchable}>
+              <Text style={styles.touchableText}>Crédits</Text>
+            </TouchableOpacity>
+          </ImageBackground>
+        ) : (
+          <>
+
+            <ImageBackground source={require('../img/terrain1.png')} resizeMode="cover" style={styles.image}>
+              {this.state.show_arrow ? (
+                <View style={styles.rectangle}>
+                  <View style={styles.triangle} />
+                </View>
+              ) : null}
+              {this.state.show_arrow ? (
+                <Text style={styles.force}> Force : {this.state.speed}</Text>
+              ) : null}
+
+              <View style={styles.trou} />
+             
+              <ImageBackground source={require('../img/flag.png')} resizeMode="cover" style={styles.drapeau}>
+              </ImageBackground>
+                          
+
+              <ImageBackground source={require('../img/balle.png')} resizeMode="cover" style={styles.styleball}>
+                <Button onPress={this.handleClick}></Button>
+              </ImageBackground>
+
+              <ImageBackground source={require('../img/flecheup.png')} resizeMode="cover" style={styles.styleup}>
+                <Button onPress={this.handleClickUP}> </Button>
+              </ImageBackground>
+              <ImageBackground source={require('../img/flechert.png')} resizeMode="cover" style={styles.stylert}>
+                <Button onPress={this.handleClickRIGHT}></Button>
+              </ImageBackground>
+              <ImageBackground source={require('../img/flechelt.png')} resizeMode="cover" style={styles.stylelt}>
+                <Button onPress={this.handleClickLEFT}></Button>
+              </ImageBackground>
+              <ImageBackground source={require('../img/flechedo.png')} resizeMode="cover" style={styles.styledo}>
+                <Button onPress={this.handleClickDOWN}></Button>
+              </ImageBackground>
+            </ImageBackground>
+          </>
+        )}
+
+      </TouchableOpacity>
     );
   }
 }
-
 export default Ball;
