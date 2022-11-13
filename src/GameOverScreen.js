@@ -1,32 +1,26 @@
 // Path GameOverScreen.js
-import React from 'react';
-import { StyleSheet, Text, View, Button, TouchableOpacity, AppRegistry, Image, ImageBackground, Dimensions, TouchableHighlight, TouchableWithoutFeedback, PanResponder, Animated } from 'react-native';
+import React from 'react'
+import { StyleSheet, Text, View, TouchableOpacity} from 'react-native'
 
-const { width, height } = Dimensions.get("window");
-
-export const GameOverScreen = ({resetGame, bestScore, score}) => {
+export const GameOverScreen = ({retourMenu, bestScore}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.paragraph}>
         Game Over
       </Text>
       <Text style={styles.paragraph}>
-        Score : {score}
-      </Text>
-      <Text style={styles.paragraph}>
         Best Score : {bestScore}
       </Text>
-      <TouchableOpacity onPress={() => {resetGame();}} style={styles.button}>
+      <TouchableOpacity onPress={() => {retourMenu();}} style={styles.button}>
         <Text style={styles.buttonText}>Menu</Text>
       </TouchableOpacity>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'red',
@@ -47,5 +41,5 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 20,
     fontWeight: 'bold',
-  },
-});
+  }
+})

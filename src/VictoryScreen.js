@@ -1,17 +1,15 @@
 // Path VictoryScreen.js
-import React, {useState, useRef, useEffect} from 'react';
-import { StyleSheet, Text, View, Button, TouchableOpacity, AppRegistry, Image, ImageBackground, Dimensions, TouchableHighlight, TouchableWithoutFeedback, PanResponder, Animated } from 'react-native';
-
-const { width, height } = Dimensions.get("window");
+import React, {useState, useEffect} from 'react'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 
 export const VictoryScreen = (props) => {
-  const [bestScore, setBestScore] = useState(0);
-  const [score, setScore] = useState(0);
+  const [bestScore, setBestScore] = useState(0)
+  const [score, setScore] = useState(0)
 
   useEffect(() => {
-    setBestScore(props.bestScore);
+    setBestScore(props.bestScore)
     setScore(props.score);
-  }, [props.bestScore, props.score]);
+  }, [props.bestScore, props.score])
 
   return (
     <View style={styles.container}>
@@ -24,17 +22,16 @@ export const VictoryScreen = (props) => {
       <Text style={styles.paragraph}>
         Meilleur score : {bestScore}
       </Text>
-      <TouchableOpacity style={styles.button} onPress={() => props.resetGame()}>
+      <TouchableOpacity style={styles.button} onPress={() => props.retourMenu()}>
         <Text style={styles.buttonText}>Menu</Text>
       </TouchableOpacity>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'green',
@@ -54,5 +51,5 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 20,
-  },
-});
+  }
+})

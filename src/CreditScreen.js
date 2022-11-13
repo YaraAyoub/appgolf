@@ -1,6 +1,6 @@
 // Path CreditScreen.js
-import React from "react";
-import { View, StyleSheet, Text, TouchableOpacity, Button } from "react-native";
+import React from "react"
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native"
 
 export const CreditScreen = (props) => {
     return (
@@ -19,7 +19,7 @@ export const CreditScreen = (props) => {
                 <Text style={styles.buttonText}>Menu</Text>
             </TouchableOpacity>
         </View>
-    );
+    )
 }
 
 const styles = StyleSheet.create({
@@ -51,5 +51,5 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 20,
-  },
-});
+  }
+})
