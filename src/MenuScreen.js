@@ -1,11 +1,14 @@
 // Path MenuScreen.js
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, ImageBackground } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, ImageBackground, Dimensions } from 'react-native'
 import Constants from 'expo-constants'
 
 import { CreditScreen } from './CreditScreen';
 
-export const MenuScreen = ({startGame}) => {
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+
+export const MenuScreen = ({startEasy, startMedium, startHard}) => {
 
   const [showCredit, setShowCredit] = React.useState(false);
 
@@ -25,11 +28,17 @@ export const MenuScreen = ({startGame}) => {
       <ImageBackground source={require('../img/bgMenu.png')} resizeMode="cover" style={styles.image}>
           <Text style={styles.text}>Menu</Text>
           
-          <TouchableOpacity style={styles.touchable} onPress={startGame}>
-              <Text style={styles.touchableText}>Start</Text>
+          <TouchableOpacity style={styles.easy} onPress={startEasy}>
+              <Text style={styles.touchableText}>Easy</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.medium} onPress={startMedium}>
+              <Text style={styles.touchableText}>Medium</Text>
+          </TouchableOpacity>
+           <TouchableOpacity style={styles.hard} onPress={startHard}>
+              <Text style={styles.touchableText}>Hard</Text>
           </TouchableOpacity>
   
-          <TouchableOpacity style={styles.touchable} onPress={credit}>
+          <TouchableOpacity style={styles.credit} onPress={credit}>
               <Text style={styles.touchableText}>Crédits</Text>
           </TouchableOpacity>
       </ImageBackground>     
@@ -38,17 +47,40 @@ export const MenuScreen = ({startGame}) => {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
+  easy: {
+    position : 'absolute',
+    top : windowHeight*0.5615,
+    left : windowWidth*0.1886,
     alignItems: 'center',
-    paddingTop: Constants.statusBarHeight,
+    backgroundColor: 'green',
+    padding: 10,
+    borderRadius: 10,
   },
-  touchable: {
+  medium: {
+    position : 'absolute',
+    top : windowHeight*0.5615,
+    left : windowWidth*0.4127,
+    alignItems: 'center',
+    backgroundColor: 'orange',
+    padding: 10,
+    borderRadius: 10,
+  },
+   hard: {
+    position : 'absolute',
+    top : windowHeight*0.5615,
+    left : windowWidth*0.7075,
+    alignItems: 'center',
+    backgroundColor: 'red',
+    padding: 10,
+    borderRadius: 10,
+  },
+  credit: {
+    position : 'absolute',
+    top : windowHeight*0.4535,
+    left : windowWidth*0.4127,
     alignItems: 'center',
     backgroundColor: '#7986cb',
     padding: 10,
-    marginTop: 30,
     borderRadius: 10,
   },
   touchableText: {
@@ -56,6 +88,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   text: {
+     position : 'absolute',
+    top : 340,
+    left : 170,
     color: 'black',
     fontSize: 40,
   },

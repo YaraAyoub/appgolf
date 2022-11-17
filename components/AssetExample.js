@@ -6,11 +6,13 @@ import { VictoryScreen } from "../src/VictoryScreen";
 import { GameOverScreen } from "../src/GameOverScreen";
 import { MenuScreen } from '../src/MenuScreen';
 
-//Constante écran
+//Constante Ã©cran
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-const height_mer = 90;
-const width_mer = 300;
+const height_mer = windowHeight*0.0971;
+const width_mer = windowWidth*0.7075;
+const height_tree = 535;
+const width_tree = 467;
 
 class Ball extends React.Component {
   //create a constructor
@@ -46,6 +48,12 @@ class Ball extends React.Component {
       color_force: 'green',
       x_mer: 0,
       y_mer: windowHeight*0.4859,
+      x_tree: windowWidth*0.4,
+      y_tree: windowHeight*0.2,
+      x_tree2: windowWidth*0.4,
+      y_tree2: windowHeight*0.6,
+      x_tree3: windowWidth*0.1,
+      y_tree3: windowHeight*0.6,
       nbCoups: 0,
     };
 
@@ -55,6 +63,9 @@ class Ball extends React.Component {
     this.start = this.start.bind(this);
     this.resetGame = this.resetGame.bind(this);
     this.chooseBallDirection = this.chooseBallDirection.bind(this);
+    this.setLevelEasy = this.setLevelEasy.bind(this);
+    this.setLevelMedium = this.setLevelMedium.bind(this);
+    this.setLevelHard = this.setLevelHard.bind(this);
     //this.timer = this.timer.bind(this);
   }
 
@@ -90,6 +101,19 @@ class Ball extends React.Component {
       y : windowHeight * 0.1619,
     })
     );
+  }
+
+  setLevelEasy () {
+
+    this.start()
+  }
+
+  setLevelMedium () {
+    this.start()
+  }
+
+  setLevelHard () {
+    this.start()
   }
 
   resetGame() {
@@ -275,6 +299,7 @@ class Ball extends React.Component {
       vy = vy - 0.0200;
     }
 
+    // verifie si la balle entre en collision avec un obstacle
     if (y <= this.state.y_mer + height_mer && y+30 >= this.state.y_mer && x <= this.state.x_mer + width_mer && x +30>= this.state.x_mer) {
       x = prev_x;
       y = prev_y;
@@ -362,7 +387,7 @@ class Ball extends React.Component {
     return (
       <>
         {this.state.show_menu ? (
-          <MenuScreen startGame={this.start} />
+          <MenuScreen startEasy={this.setLevelEasy} startMedium={this.setLevelMedium} startHard={this.setLevelHard} />
         ) : (
           <>
             {this.state.victory ?(
@@ -376,7 +401,7 @@ class Ball extends React.Component {
 
                 <ImageBackground source={require('../img/terrain2.png')} resizeMode="cover" style={styles2.image}>
 
-                  <Text style={styles2.coupRestant}>{this.state.nbCoups}</Text>
+                  <Text style={styles2.coupRestant}>{this.state.nbCoups}/5</Text>
 
                   <Text style={styles.textforce}> Force = {this.state.speed} </Text>
 
@@ -385,7 +410,12 @@ class Ball extends React.Component {
                       <View style={styles2.triangle} />
                     </View>
                   ) : null}
+
                   <ImageBackground source={require('../img/mer.jpg')} resizeMode="cover" style={{ ...styles2.squarewater, top: this.state.y_mer, left : this.state.x_mer}} />
+                  <ImageBackground source={require('../img/arbre.png')} resizeMode="cover" style={{ ...styles2.tree, top: this.state.y_tree, left : this.state.x_tree}} />
+                  <ImageBackground source={require('../img/arbre.png')} resizeMode="cover" style={{ ...styles2.tree, top: this.state.y_tree2, left : this.state.x_tree2}} />
+                  <ImageBackground source={require('../img/arbre.png')} resizeMode="cover" style={{ ...styles2.tree, top: this.state.y_tree3, left : this.state.x_tree3}} />
+
 
                   <View style={styles.trou} />
                   
@@ -482,11 +512,17 @@ const styles2 = StyleSheet.create({
     width: width_mer,
     height: height_mer,
   },
+  tree: {
+    position: 'absolute',
+    width: width_tree*0.2,
+    height: height_tree*0.2,
+  },
   coupRestant: {
-    flex: 1,
-    margin: 12,
     color: 'black',
     fontSize: 35,
+      position: 'absolute',
+      top : windowHeight * 0.0539,
+      left : windowWidth*0.4245,
   }
 });
 
