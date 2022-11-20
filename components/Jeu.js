@@ -9,10 +9,15 @@ import { MenuScreen } from '../src/MenuScreen';
 //Constante Ã©cran
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-const height_mer = windowHeight*0.0971;
-const width_mer = windowWidth*0.7075;
-const height_tree = 535;
-const width_tree = 467;
+const height_mer = windowHeight * 0.0971;
+const width_mer = windowWidth * 0.600;
+const height_tree = windowHeight * 0.1145;
+const width_tree = windowWidth * 0.3655;
+const height_sand = windowHeight*0.1619;
+const width_sand = windowWidth*0.2830;
+
+let nbCoupMax = 5;
+let nbObsatcle = 2;
 
 class Ball extends React.Component {
   //create a constructor
@@ -25,8 +30,8 @@ class Ball extends React.Component {
     this.state = {
       isToggleOn: true,
       prectoggle: true,
-      x: 50,
-      y: 150, // + 12 // -5 
+      x: windowWidth*0.1179,
+      y: windowHeight*0.1187, // + 12 // -5 
       prev_x: 150,
       prev_y: 400,
       vx: 0,
@@ -38,23 +43,26 @@ class Ball extends React.Component {
       rotate: 0,
       speed: 1,
       show_arrow: 1,
-      show_menu: 1,
-      x_drapeau: 100,
-      y_drapeau: 650, // MIN : windowHeight * 0.167 // MAX :  windowHeight * 0.78 
+      show_menu: 0,
+      x_drapeau: windowWidth*0.2358,
+      y_drapeau: windowHeight*0.8099, // MIN : windowHeight * 0.167 // MAX :  windowHeight * 0.78 
       victory: 0,
       defeat: 0,
       x_touch: 0,
       y_touch: 0,
       color_force: 'green',
       x_mer: 0,
-      y_mer: windowHeight*0.4859,
-      x_tree: windowWidth*0.4,
-      y_tree: windowHeight*0.2,
-      x_tree2: windowWidth*0.4,
-      y_tree2: windowHeight*0.6,
-      x_tree3: windowWidth*0.1,
-      y_tree3: windowHeight*0.6,
+      y_mer: windowHeight * 0.4859,
+      x_tree: windowWidth * 0.3301, // taille 92
+      y_tree: windowHeight *0.2159, // taille 107 
+      x_tree2: windowWidth * 0.6,
+      y_tree2: windowHeight * 0.7,
+      x_tree3: windowWidth * 0.03,
+      y_tree3: windowHeight * 0.6,
+      x_sand : windowWidth*0.63, 
+      y_sand : windowHeight*0.4535,
       nbCoups: 0,
+      test: 0,
     };
 
     this.shootBall = this.shootBall.bind(this);
@@ -66,7 +74,6 @@ class Ball extends React.Component {
     this.setLevelEasy = this.setLevelEasy.bind(this);
     this.setLevelMedium = this.setLevelMedium.bind(this);
     this.setLevelHard = this.setLevelHard.bind(this);
-    //this.timer = this.timer.bind(this);
   }
 
   // function called when the button "tap to shoot" is clicked
@@ -75,44 +82,49 @@ class Ball extends React.Component {
       this.setState(prevState => ({
         isToggleOn: !prevState.isToggleOn,
         touchable: 0,
+        nbCoups : this.state.nbCoups + 1,
       })
       );
-      this.state.nbCoups = this.state.nbCoups + 1;
-      this.moveBall();
-
-      if (this.state.nbCoups == 6) {
-        this.state.defeat = 1;
-      }
+     
+      this.moveBall();     
     }
   }
 
   start() {
-    let max_height = windowHeight * 0.777;
-    let min_height = windowHeight * 0.7019;
-    let max_width = windowWidth * 0.841;
-    let y_drapeau_bis = Math.random() * (max_height - min_height) + min_height;
-    let x_drapeau_bis = Math.random() * (max_width);
+    // let max_height = windowHeight * 0.8500;
+    // let min_height = windowHeight * 0.7019;
+    // let max_width = windowWidth * 0.841;
+    // let y_drapeau_bis = Math.random() * (max_height - min_height) + min_height;
+    // let x_drapeau_bis = Math.random() * (max_width);
+    
 
     this.setState(prevState => ({
       show_menu: 0,
-      y_drapeau: y_drapeau_bis,
-      x_drapeau: x_drapeau_bis, 
-      x : windowWidth*0.1779,
-      y : windowHeight * 0.1619,
+      // y_drapeau: y_drapeau_bis,
+      // x_drapeau: x_drapeau_bis,
+      x_drapeau: windowWidth*0.2358,
+      y_drapeau: windowHeight*0.8099,
+      x: windowWidth * 0.1779,
+      y: windowHeight * 0.1619,
     })
     );
   }
 
   setLevelEasy () {
-
+    nbCoupMax = 7;
+    nbObsatcle = 2;
     this.start()
   }
 
   setLevelMedium () {
+    nbCoupMax = 5;
+    nbObsatcle = 2;
     this.start()
   }
 
   setLevelHard () {
+    nbCoupMax = 4;
+    nbObsatcle = 3;
     this.start()
   }
 
@@ -120,8 +132,8 @@ class Ball extends React.Component {
     this.setState({
       isToggleOn: true,
       prectoggle: true,
-      x: 155,
-      y: 395, // + 12 // -5 
+      x: windowWidth*0.1179,
+      y: windowHeight*0.1187, // + 12 // -5 
       vx: 0,
       vy: 0,
       radius: 10,
@@ -168,13 +180,13 @@ class Ball extends React.Component {
     if (speed2 != 0) {
       speed2 -= 1;
     }
-    if (speed2 < 4) {
+    if (speed2 <3) {
       colortext = 'green';
     }
-    else if (speed2 >= 4 && speed2 <= 7) {
+    else if (speed2 ==3 || speed2 == 4) {
       colortext = 'orange';
     }
-    else if (speed2 >= 8) {
+    else if (speed2 ==5) {
       colortext = 'red';
     }
     this.setState(prevState => ({
@@ -218,10 +230,8 @@ class Ball extends React.Component {
     let prev_x = this.state.prev_x;
     let prev_y = this.state.prev_y;
     //create a variable called vx and set it to the current vx position of the ball
-    let vx = this.state.vx;
-    //create a variable called vy and set it to the current vy position of the ball
-    let vy = this.state.vy;
 
+let defeat = this.state.defeat;
     let rotate = this.state.rotate;
     let touchable = 0;
     let x_drapeau = this.state.x_drapeau;
@@ -245,29 +255,38 @@ class Ball extends React.Component {
     }
     if (toggle != prectoggle) {
       prectoggle = toggle;
-      vx = vitesse_b * 0.05;
-      vy = vitesse_b * 0.05;
+      this.setState({ vx: vitesse_b * 0.05 })
+      this.setState({ vy: vitesse_b * 0.05 })
     }
 
-    let nextX = x + vx * Math.cos((rotate * 3.14) / 180);
+    let nextX = x + this.state.vx * Math.cos((rotate * 3.14) / 180);
     //create a variable called nextY and set it to the current y position of the ball plus the current vy position of the ball
-    let nextY = y + vy * Math.sin((rotate * 3.14) / 180);
+    let nextY = y + this.state.vy * Math.sin((rotate * 3.14) / 180);
 
-    if (vx != 0 && (nextX <= 0 || nextX >= windowWidth - ((428 * 7.24) / 100))) {
+    if (this.state.vx != 0 && (nextX <= 0 || nextX >= windowWidth - ((428 * 7.24) / 100))) {
       //set the vx position of the ball to the opposite of the current vx position of the ball
-      vx = -vx;
-      nextX = x + vx * Math.cos((rotate * 3.14) / 180);
+      this.setState({ vx: -(this.state.vx) })
+      nextX = x + this.state.vx * Math.cos((rotate * 3.14) / 180);
       // rotate = rotate + 180;
     }
     //if the next y position of the ball is less than or equal to zero or greater than or equal to the height of the window minus the radius of the ball
-
-    if (vy != 0 && (nextY <= ((windowHeight * 10.6) / 100) || nextY >= ((windowHeight * 85.5) / 100))) {
+    if (this.state.vy != 0 && (nextY <= ((windowHeight * 10.6) / 100) || nextY >= ((windowHeight * 85.5) / 100))) {
       //set the vy position of the ball to the opposite of the current vy position of the ball
       // vy = -vy;
-      vy = -vy;
-      nextY = y + vy * Math.sin((rotate * 3.14) / 180);
+      this.setState({ vy: -(this.state.vy) })
+      nextY = y + this.state.vy * Math.sin((rotate * 3.14) / 180);
       //  rotate = rotate +180;
     }
+
+    touchtrees(this, this.state.x_tree, this.state.y_tree);
+    touchtrees(this, this.state.x_tree2, this.state.y_tree2);
+    touchtrees(this, this.state.x_tree3, this.state.y_tree3);
+
+    let vx = this.state.vx;
+    //create a variable called vy and set it to the current vy position of the ball
+    let vy = this.state.vy;
+
+
 
     if (x_drapeau + 8 >= x && x_drapeau - 4 <= x && y_drapeau - 4 <= y && y <= y_drapeau + 8 && vx <= 2.7 && vy <= 2.7) {
       vx = 0;
@@ -281,26 +300,57 @@ class Ball extends React.Component {
       show_arrow = 1;
       prev_x = this.state.x;
       prev_y = this.state.y;
+       if (this.state.nbCoups == nbCoupMax) {
+        defeat = 1;
+       }
     }
     else {
       show_arrow = 0;
     }
 
     if (vx < 0) {
+      if (y <= this.state.y_sand + height_sand && y + 30 >= this.state.y_sand && x <= this.state.x_sand + width_sand && x + 30 >= this.state.x_sand)
+      {
+        vx = vx + 0.0300;
+      }
+      else
+      {
       vx = vx + 0.0200;
+      }
     }
     else if (vx > 0) {
+      if (y <= this.state.y_sand + height_sand && y + 30 >= this.state.y_sand && x <= this.state.x_sand + width_sand && x + 30 >= this.state.x_sand)
+      {
+        vx = vx - 0.0300;
+      }
+      else
+      {
       vx = vx - 0.0200;
+      }
     }
     if (vy < 0) {
+     if (y <= this.state.y_sand + height_sand && y + 30 >= this.state.y_sand && x <= this.state.x_sand + width_sand && x + 30 >= this.state.x_sand)
+      {
+        vy = vy + 0.0300;
+      }
+      else
+      {
       vy = vy + 0.0200;
+      }
     }
     else if (vy > 0) {
+      if (y <= this.state.y_sand + height_sand && y + 30 >= this.state.y_sand && x <= this.state.x_sand + width_sand && x + 30 >= this.state.x_sand)
+      {
+        vy = vy - 0.0300;
+      }
+      else
+      {
       vy = vy - 0.0200;
+      }
     }
 
     // verifie si la balle entre en collision avec un obstacle
-    if (y <= this.state.y_mer + height_mer && y+30 >= this.state.y_mer && x <= this.state.x_mer + width_mer && x +30>= this.state.x_mer) {
+    if (y <= this.state.y_mer + height_mer && y + 30 >= this.state.y_mer && x <= this.state.x_mer + width_mer && x + 30 >= this.state.x_mer) {
       x = prev_x;
       y = prev_y;
       vx = 0;
@@ -312,6 +362,8 @@ class Ball extends React.Component {
       x = x + vx * Math.cos((rotate * 3.14) / 180);
       y = y + vy * Math.sin((rotate * 3.14) / 180);
     }
+
+
 
     //set the state of the ball to the new x position, the new y position, the new vx position, the new vy position, the radius of the ball, and the color of the ball
     this.setState({
@@ -327,7 +379,8 @@ class Ball extends React.Component {
       show_arrow: show_arrow,
       victory: victory,
       prev_x: prev_x,
-      prev_y: prev_y
+      prev_y: prev_y, 
+      defeat : defeat,
     });
     setTimeout(this.moveBall.bind(this), 1);
   }
@@ -341,7 +394,9 @@ class Ball extends React.Component {
         flex: 1,
         justifyContent: "center",
         height: 30,
-        width: 30
+        width: 30, 
+        shadowColor : 'black',
+        zIndex : 3,
       },
       rectangle: {
         width: this.state.height,
@@ -355,13 +410,15 @@ class Ball extends React.Component {
             rotate: this.state.rotate + 'deg'
           }
         ],
+        zIndex : 2,
       },
       drapeau: {
         width: 70,
         height: 80,
         position: 'absolute',
         top: this.state.y_drapeau - 60,
-        left: this.state.x_drapeau + 8
+        left: this.state.x_drapeau + 8,
+        zIndex : 1,
       },
       trou:
       {
@@ -371,7 +428,8 @@ class Ball extends React.Component {
         backgroundColor: 'black',
         position: 'absolute',
         top: this.state.y_drapeau,
-        left: this.state.x_drapeau
+        left: this.state.x_drapeau,
+        zIndex : 1,
       },
       textforce:
       {
@@ -380,7 +438,8 @@ class Ball extends React.Component {
         left: windowWidth * 0.163,
         fontSize: 20,
         fontWeight: "bold",
-        color: this.state.color_force
+        color: this.state.color_force,
+        zIndex : 1,
       }
     });
 
@@ -390,53 +449,53 @@ class Ball extends React.Component {
           <MenuScreen startEasy={this.setLevelEasy} startMedium={this.setLevelMedium} startHard={this.setLevelHard} />
         ) : (
           <>
-            {this.state.victory ?(
+            {this.state.victory ? (
               <VictoryScreen score={this.state.nbCoups} bestScore={this.state.nbCoups} retourMenu={this.resetGame} />
-            ):
-            this.state.defeat ?(
-              <GameOverScreen bestScore={this.state.nbCoups} retourMenu={this.resetGame} />
-            )
-            : (
-              <TouchableOpacity activeOpacity={1} onPress={(e) => this.chooseBallDirection(e)} style={styles2.touchableScreen}>
+            ) :
+              this.state.defeat ? (
+                <GameOverScreen bestScore={this.state.nbCoups} retourMenu={this.resetGame} />
+              )
+                : (
+                  <TouchableOpacity activeOpacity={1} onPress={(e) => this.chooseBallDirection(e)} style={styles2.touchableScreen}>
 
-                <ImageBackground source={require('../img/terrain2.png')} resizeMode="cover" style={styles2.image}>
+                    <ImageBackground source={require('../img/terrain2.png')} resizeMode="cover" style={styles2.image}>
 
-                  <Text style={styles2.coupRestant}>{this.state.nbCoups}/5</Text>
+                      <Text style={styles2.coupRestant}>{this.state.nbCoups}/{nbCoupMax}</Text>
 
-                  <Text style={styles.textforce}> Force = {this.state.speed} </Text>
+                      <Text style={styles.textforce}> Force = {this.state.speed} </Text>
 
-                  {this.state.show_arrow ? (
-                    <View style={styles.rectangle}>
-                      <View style={styles2.triangle} />
-                    </View>
-                  ) : null}
+                      {this.state.show_arrow ? (
+                        <View style={styles.rectangle}>
+                          <View style={styles2.triangle} />
+                        </View>
+                      ) : null}
 
-                  <ImageBackground source={require('../img/mer.jpg')} resizeMode="cover" style={{ ...styles2.squarewater, top: this.state.y_mer, left : this.state.x_mer}} />
-                  <ImageBackground source={require('../img/arbre.png')} resizeMode="cover" style={{ ...styles2.tree, top: this.state.y_tree, left : this.state.x_tree}} />
-                  <ImageBackground source={require('../img/arbre.png')} resizeMode="cover" style={{ ...styles2.tree, top: this.state.y_tree2, left : this.state.x_tree2}} />
-                  <ImageBackground source={require('../img/arbre.png')} resizeMode="cover" style={{ ...styles2.tree, top: this.state.y_tree3, left : this.state.x_tree3}} />
+                      <ImageBackground source={require('../img/mer.jpg')} resizeMode="cover" style={{ ...styles2.squarewater, top: this.state.y_mer, left: this.state.x_mer }} />
+                      <ImageBackground source={require('../img/arbre.png')} resizeMode="cover" style={{ ...styles2.tree, top: this.state.y_tree, left: this.state.x_tree }} />
+                      <ImageBackground source={require('../img/arbre.png')} resizeMode="cover" style={{ ...styles2.tree, top: this.state.y_tree2, left: this.state.x_tree2 }} />
+                      <ImageBackground source={require('../img/arbre.png')} resizeMode="cover" style={{ ...styles2.tree, top: this.state.y_tree3, left: this.state.x_tree3 }} />
+ <ImageBackground source={require('../img/sable.png')} resizeMode="cover" style={{ ...styles2.sand, top: this.state.y_sand, left: this.state.x_sand }} />
 
+                      <View style={styles.trou} />
 
-                  <View style={styles.trou} />
-                  
-                  <ImageBackground source={require('../img/flag.png')} resizeMode="cover" style={styles.drapeau} />
+                      <ImageBackground source={require('../img/flag.png')} resizeMode="cover" style={styles.drapeau} />
 
-                  <ImageBackground source={require('../img/balle.png')} resizeMode="cover" style={styles.styleball} />
-                  
-                  <ImageBackground source={require('../img/flecheup.png')} resizeMode="cover" style={styles2.styleup}>
-                    <Button onPress={this.increaseForce} />
-                  </ImageBackground>
-                  
-                  <ImageBackground source={require('../img/flechedo.png')} resizeMode="cover" style={styles2.styledo}>
-                    <Button onPress={this.decreaseForce} />
-                  </ImageBackground>
-                  
-                  <TouchableHighlight style={styles2.buttonShoot} onPress={this.shootBall}>
-                    <Text style={styles2.textShoot}>Tap to Shoot</Text>
-                  </TouchableHighlight>
-                </ImageBackground>
-              </TouchableOpacity>
-            )}
+                      <ImageBackground source={require('../img/balle.png')} resizeMode="cover" style={styles.styleball} />
+
+                      <ImageBackground source={require('../img/flecheup.png')} resizeMode="cover" style={styles2.styleup}>
+                        <Button onPress={this.increaseForce} />
+                      </ImageBackground>
+
+                      <ImageBackground source={require('../img/flechedo.png')} resizeMode="cover" style={styles2.styledo}>
+                        <Button onPress={this.decreaseForce} />
+                      </ImageBackground>
+
+                      <TouchableHighlight style={styles2.buttonShoot} onPress={this.shootBall}>
+                        <Text style={styles2.textShoot}>Tap to Shoot</Text>
+                      </TouchableHighlight>
+                    </ImageBackground>
+                  </TouchableOpacity>
+                )}
           </>
         )}
       </>
@@ -454,6 +513,7 @@ const styles2 = StyleSheet.create({
     justifyContent: "center",
     height: 60,
     width: 60,
+    zIndex : 1,
   },
   styledo: {
     position: 'absolute',
@@ -463,6 +523,7 @@ const styles2 = StyleSheet.create({
     justifyContent: "center",
     height: 60,
     width: 60,
+    zIndex : 1,
   },
   triangle: {
     width: 0,
@@ -482,15 +543,18 @@ const styles2 = StyleSheet.create({
         rotate: 90 + 'deg'
       }
     ],
+    zIndex : 1,
   },
   image: {
     flex: 1,
     justifyContent: "center",
     alignItems: 'center',
+    zIndex : 1,
   },
   touchableScreen: {
     width: windowWidth,
-    height: windowHeight
+    height: windowHeight,
+    zIndex : 3,
   },
   buttonShoot:
   {
@@ -500,30 +564,55 @@ const styles2 = StyleSheet.create({
     height: 60,
     width: 160,
     backgroundColor: '#178033',
+    zIndex : 1,
   },
   textShoot: {
     color: 'white',
     textAlign: 'center',
-    fontSize: 20
-
+    fontSize: 20,
+zIndex : 1,
   },
   squarewater: {
     position: 'absolute',
     width: width_mer,
     height: height_mer,
+    zIndex : 1,
   },
   tree: {
     position: 'absolute',
-    width: width_tree*0.2,
-    height: height_tree*0.2,
+    width: width_tree,
+    height: height_tree,
+    zIndex : 1,
+  },
+  sand: {
+    position: 'absolute',
+    width: width_sand,
+    height: height_sand,
+    zIndex : 1,
   },
   coupRestant: {
     color: 'black',
     fontSize: 35,
-      position: 'absolute',
-      top : windowHeight * 0.0539,
-      left : windowWidth*0.4245,
+    position: 'absolute',
+    top: windowHeight * 0.0539,
+    left: windowWidth * 0.4245,
+    zIndex : 1,
   }
 });
+
+function touchtrees(monObjet, x_tree, y_tree) {
+
+  if (monObjet.state.y <= y_tree + height_tree && monObjet.state.y + 30 >= y_tree && monObjet.state.x <= x_tree + width_tree && monObjet.state.x + 30 >= x_tree) {
+
+    if (Math.abs(monObjet.state.x - (x_tree + width_tree)) < 3 || Math.abs(monObjet.state.x + 30 - x_tree) < 3) {
+      monObjet.setState({ vx: -(monObjet.state.vx) })
+    }
+    if (Math.abs(monObjet.state.y - (y_tree + height_tree)) < 3 || Math.abs(monObjet.state.y + 30 - y_tree) < 3) {
+      monObjet.setState({vy: -(monObjet.state.vy)})
+    }
+
+  }
+}
+
 
 export default Ball;

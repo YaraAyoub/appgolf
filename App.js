@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet, View } from "react-native";
 
 // You can import from local files
-import Jeu from './components/AssetExample';
+import Jeu from './components/Jeu';
 
 export default function App() {
   const props = {firstName: 'Ben', job: 'Designer' };
