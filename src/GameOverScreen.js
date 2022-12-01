@@ -1,45 +1,58 @@
 // Path GameOverScreen.js
 import React from 'react'
-import { StyleSheet, Text, View, TouchableOpacity} from 'react-native'
+import {ImageBackground, Dimensions,  RefreshControl , StyleSheet, Text, View, TouchableOpacity, useState} from 'react-native'
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+}
+
+
 
 export const GameOverScreen = ({retourMenu, bestScore}) => {
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.paragraph}>
+    <>
+      <ImageBackground source={require('../img/gameover.gif')} resizeMode="cover" style={styles.gameover}/>
+      <Text style={{ ...styles.paragraph, top: windowHeight*0.28, left: windowWidth*0.13, fontSize: 60, color : 'red'}}>
         Game Over
       </Text>
-      <Text style={styles.paragraph}>
+      <Text  style={{ ...styles.paragraph, top: windowHeight*0.6479, left: windowWidth * 0.2948, fontSize: 25, color : 'red'}}>
         Best Score : {bestScore}
       </Text>
+
       <TouchableOpacity onPress={() => {retourMenu();}} style={styles.button}>
+
         <Text style={styles.buttonText}>Menu</Text>
       </TouchableOpacity>
-    </View>
+    </>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'red',
+  gameover : {
+    width : windowWidth, 
+    height : windowHeight,
   },
   paragraph: {
-    margin: 24,
-    fontSize: 18,
+    position : 'absolute',
     fontWeight: 'bold',
     textAlign: 'center',
   },
   button: {
-    alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10,
+    position : 'absolute',
+    backgroundColor: 'white',
     borderRadius: 10,
-    margin: 10,
+    top :windowHeight*0.75593,
+left :  windowWidth*0.36556,
+ height: windowHeight*0.05399,
+    width:  windowWidth*0.23584,
   },
   buttonText: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 30,
+    color : 'black', 
+    padding : windowHeight*0.00539,
+    paddingLeft: windowWidth*0.0353,
   }
 })

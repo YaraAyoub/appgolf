@@ -1,7 +1,8 @@
 // Path VictoryScreen.js
 import React, {useState, useEffect} from 'react'
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
-
+import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, Dimensions } from 'react-native'
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 export const VictoryScreen = (props) => {
   const [bestScore, setBestScore] = useState(0)
   const [score, setScore] = useState(0)
@@ -12,44 +13,50 @@ export const VictoryScreen = (props) => {
   }, [props.bestScore, props.score])
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.paragraph}>
+    <>
+    <ImageBackground source={require('../img/victory2.gif')} resizeMode="cover" style={styles.victory}/>
+      <Text style={{ ...styles.paragraph, top: windowHeight*0.21598, left: windowWidth*0.23584, fontSize: 60}}>
         Victoire
       </Text>
-      <Text style={styles.paragraph}>
+      <Text style={{ ...styles.paragraph, top: windowHeight*0.4319, left:  windowWidth*0.35377, fontSize: 25}}>
         Score : {score}
       </Text>
-      <Text style={styles.paragraph}>
+      <Text style={{ ...styles.paragraph, top: windowHeight*0.53995, left:  windowWidth*0.28301, fontSize: 25 }}>
         Meilleur score : {bestScore}
       </Text>
       <TouchableOpacity style={styles.button} onPress={() => props.retourMenu()}>
         <Text style={styles.buttonText}>Menu</Text>
       </TouchableOpacity>
-    </View>
+      
+     
+    </>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'green',
-  },
+
   paragraph: {
-    margin: 24,
-    fontSize: 18,
+      position : 'absolute',
     fontWeight: 'bold',
     textAlign: 'center',
   },
   button: {
-    alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10,
+    position : 'absolute',
+    backgroundColor: 'white',
     borderRadius: 10,
-    margin: 10,
+    top : windowHeight*0.70194,
+left :  windowWidth*0.36556,
+ height: windowHeight*0.05399,
+    width:  windowWidth*0.23584,
   },
   buttonText: {
-    fontSize: 20,
+    fontSize: 30,
+    color : 'black', 
+    padding : windowHeight*0.00539,
+    paddingLeft: windowWidth*0.0353,
+  }, 
+  victory : {
+    width : windowWidth, 
+    height : windowHeight,
   }
 })
